@@ -1,0 +1,55 @@
+# ==============================================================================
+# Automated System Snapshot & Backup Orchestrator Configuration
+# ==============================================================================
+
+backup:
+  # Archive prefix (e.g. sys_snapshot-YYYYMMDD_HHMMSS.tar.gz)
+  archive_prefix: "sys_snapshot"
+  
+  # Compression algorithm: "gz" (gzip) or "bz2" (bzip2)
+  compression: "gz"
+  
+  # Directory where created archives will be stored
+  destination_dir: "/var/backups/sysadmin-orchestrator"
+  
+  # List of target files and directories for backup
+  targets:
+    - "/etc/nginx"
+    - "/etc/netplan"
+    - "/etc/ssh"
+    - "/etc/systemd/system"
+    - "/etc/hosts"
+    - "/etc/fstab"
+
+  # Exclusion patterns (fnmatch / glob)
+  exclude_patterns:
+    - "*.tmp"
+    - "*.sock"
+    - "*.log"
+    - "*/__pycache__/*"
+    - "*/.git/*"
+
+retention:
+  # Delete archives older than N days (0 = disabled)
+  retention_days: 14
+  
+  # Maximum number of retained archives (0 = unlimited)
+  max_backups: 10
+
+logging:
+  # Path to log file
+  log_file: "/var/log/backup_orchestrator.log"
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+  # Duplicate log output to stdout/console
+  log_to_console: true
+
+telegram:
+  # Enable/disable Telegram alerts
+  enabled: false
+  # Bot token: supports plain token or environment variable interpolation: ${TELEGRAM_BOT_TOKEN}
+  bot_token: "${TELEGRAM_BOT_TOKEN}"
+  # Target chat or channel ID (e.g. "123456789" or "-100123456789")
+  chat_id: "${TELEGRAM_CHAT_ID}"
+  # Request timeout in seconds
+  timeout_seconds: 10
